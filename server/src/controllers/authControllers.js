@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
     } catch (error) {
       let errorMessage = "Failed to create user";
       if (error.message.includes("Email")) {
-        errorMessage = "Email already exists";
+        errorMessage = error.message;
       }
       res.status(400).json({ errors: errorMessage });
     }
@@ -36,8 +36,17 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    
+    const loginResponse = await authServices.loginUser(req.body);
+    res.status(200).json(loginResponse);
   } catch (error) {
-    res.status(500).json({ error: "An unexpected error occurred." });
+    let errorMessage = "Failed to login user";
+
+    if (error.message.includes("email")) {
+      errorMessage = "User with this email not found";
+      res.status(404).json({ errors: errorMessage });
+    } else if (error.message.includes("password")) {
+      errorMessage = "You entered the wrong password";
+      res.status(401).json({ errors: errorMessage });
+    } else res.status(500).json({ error: "An unexpected error occurred." });
   }
 };
