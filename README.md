@@ -27,7 +27,11 @@ This project aims to build a web application, allowing users to search and watch
 
 ## Running the app
 
-First, clone the app `gcl git@github.com:Ayarra/streaming-app.git`
+First, clone the app
+
+```
+gcl git@github.com:Ayarra/streaming-app.git
+```
 
 ### The backend
 
