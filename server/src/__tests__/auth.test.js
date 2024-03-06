@@ -1,5 +1,5 @@
 const request = require("supertest");
-const createServer = require("../utils/server");
+const createServer = require("../config/server");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
 const userPayload = require("../utils/test-data");
