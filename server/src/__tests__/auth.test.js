@@ -85,10 +85,9 @@ describe("auth", () => {
       });
     });
   });
-  describe("user signup", () => {
+  describe("user login", () => {
     describe("given all credentials are valid", () => {
       it("should return 200 with a success message", async () => {
-        // await registerUser(userPayload.registerValidUser);
         const testUser = userPayload.loginValidUser;
 
         const { username } = await User.findOne({
@@ -106,6 +105,30 @@ describe("auth", () => {
           expiresIn: expect.any(String),
         });
         expect(response.statusCode).toBe(200);
+      });
+    });
+    describe("given a wrong email address", () => {
+      it("should return 404 with an error message", async () => {
+        const testUser = userPayload.loginInvalidEmailUser;
+
+        const response = await request(app).post("/auth/login").send(testUser);
+
+        expect(response.body).toEqual({
+          errors: "User with this email not found",
+        });
+        expect(response.statusCode).toBe(404);
+      });
+    });
+    describe("given a wrong password", () => {
+      it("should return 404 with an error message", async () => {
+        const testUser = userPayload.loginInvalidPasswordUser;
+
+        const response = await request(app).post("/auth/login").send(testUser);
+
+        expect(response.body).toEqual({
+          errors: "You entered the wrong password",
+        });
+        expect(response.statusCode).toBe(401);
       });
     });
   });

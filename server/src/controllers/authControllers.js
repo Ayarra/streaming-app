@@ -40,7 +40,6 @@ exports.login = async (req, res) => {
     const loginResponse = await authServices.loginUser(req.body);
     res.status(200).json(loginResponse);
   } catch (error) {
-    console.log(error);
     let errorMessage = "Failed to login user";
 
     if (error.message.includes("email")) {

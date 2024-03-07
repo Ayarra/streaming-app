@@ -26,3 +26,13 @@ exports.loginValidUser = {
   email: "test@test.com",
   password: "password@@!",
 };
+
+exports.loginInvalidEmailUser = {
+  email: "wrong@test.com",
+  password: "password@@!",
+};
+
+exports.loginInvalidPasswordUser = {
+  email: "test@test.com",
+  password: "password@@1",
+};
