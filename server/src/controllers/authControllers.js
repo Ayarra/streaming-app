@@ -43,10 +43,11 @@ exports.login = async (req, res) => {
     const loginResponse = await authServices.loginUser(req.body);
     res.status(200).json(loginResponse);
   } catch (error) {
+    
     let errorMessage = "Failed to login user";
 
-    if (error.message.includes("email")) {
-      errorMessage = "User with this email not found";
+    if (error.message.includes("User")) {
+      errorMessage = "User with this email/username not found";
       res.status(404).json({ errors: errorMessage });
     } else if (error.message.includes("password")) {
       errorMessage = "You entered the wrong password";

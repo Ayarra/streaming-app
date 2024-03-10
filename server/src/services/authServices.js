@@ -35,16 +35,23 @@ exports.registerUser = async (userPayload) => {
 };
 
 exports.loginUser = async (userPayload) => {
+  const { email, username, password } = userPayload;
   //   Look for user
-  const user = await User.findOne({ email: userPayload.email }).exec();
-  if (!user) throw new Error("User with this email not found");
+  const existingUser = await User.findOne({
+    $or: [{ username }, { email }],
+  });
+  if (!existingUser) throw new Error("User with this email/username not found");
 
   //   Match user password
-  const match = await bcrypt.compare(userPayload.password, user.password);
+  const match = await bcrypt.compare(password, existingUser.password);
   if (match) {
-    const tokenObject = issueJWT(user);
+    const tokenObject = issueJWT(existingUser);
     return {
-      user: { _id: user._id, email: user.email, username: user.username },
+      user: {
+        _id: existingUser._id,
+        email: existingUser.email,
+        username: existingUser.username,
+      },
       token: tokenObject.token,
       expiresIn: tokenObject.expires,
     };
