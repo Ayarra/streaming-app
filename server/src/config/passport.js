@@ -4,6 +4,21 @@ const ExtractJwt = require("passport-jwt").ExtractJwt;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const User = require("../models/userModel");
 const { issueJWT } = require("../utils/jwt-utils");
+const { generateUsername, generatePassword } = require("../utils/login-utils");
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+// Deserialize user data
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
+});
 
 /**
   JWT STRATEGY 
@@ -40,28 +55,19 @@ const facebookStrategy = new FacebookStrategy(
   async (accessToken, refreshToken, profile, done) => {
     try {
       // Find or create the user in your database
-      console.log(profile);
+
       let user = await User.findOne({ facebookId: profile.id });
       if (!user) {
-        const email =
-          profile.emails && profile.emails.length > 0
-            ? profile.emails[0].value
-            : null;
         user = await User.create({
           facebookId: profile.id,
-          username: profile.displayName,
-          email: email,
-          photo:
-            profile.photos && profile.photos.length > 0
-              ? profile.photos[0].value
-              : null,
+          username: await generateUsername(profile.displayName),
+          password: await generatePassword(),
+          email: profile.emails,
         });
       }
 
-      // Generate and return a JWT token
-
-      const tokenObject = issueJWT(user);
-      return done(null, tokenObject);
+      // const tokenObject = issueJWT(user);
+      return done(null, user);
     } catch (err) {
       return done(err, null);
     }

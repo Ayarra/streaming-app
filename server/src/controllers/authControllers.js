@@ -1,5 +1,6 @@
 const authServices = require("../services/authServices");
 const { validationResult } = require("express-validator");
+const { issueJWT } = require("../utils/jwt-utils");
 
 exports.register = async (req, res) => {
   try {
@@ -43,7 +44,6 @@ exports.login = async (req, res) => {
     const loginResponse = await authServices.loginUser(req.body);
     res.status(200).json(loginResponse);
   } catch (error) {
-    
     let errorMessage = "Failed to login user";
 
     if (error.message.includes("User")) {
@@ -58,14 +58,25 @@ exports.login = async (req, res) => {
 
 exports.facebookLogin = async (req, res) => {
   try {
-    const userPayload = {
-      email: req.user.email,
-      // You can add additional fields if needed, like password (for Facebook users, you can set a default password)
-    };
+    // console.log(req.user);
+    // return {
+    //   user: {
+    //     _id: req.user._id,
+    //     username: req.user.username,
+    //   },
+    //   token: tokenObject.token,
+    //   expiresIn: tokenObject.expires,
+    // };
 
-    // Use your existing loginUser function to generate a JWT token
-    const loginResponse = await authServices.loginUser(userPayload);
-    res.status(200).json(loginResponse);
+    const tokenObject = issueJWT(req.user);
+    res.json({
+      user: {
+        _id: req.user._id,
+        username: req.user.username,
+      },
+      token: tokenObject.token,
+      expiresIn: tokenObject.expires,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
