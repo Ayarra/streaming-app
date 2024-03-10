@@ -15,18 +15,6 @@ exports.registerValidation = [
     .withMessage("Username is required")
     .isLength({ max: 50 })
     .withMessage("Username must be at most 50 characters long"),
-  body("firstName")
-    .trim()
-    .notEmpty()
-    .withMessage("First name is required")
-    .isLength({ max: 50 })
-    .withMessage("First name must be at most 50 characters long"),
-  body("lastName")
-    .trim()
-    .notEmpty()
-    .withMessage("Last name is required")
-    .isLength({ max: 50 })
-    .withMessage("Last name must be at most 50 characters long"),
   body("password")
     .trim()
     .notEmpty()

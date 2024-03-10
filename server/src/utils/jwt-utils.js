@@ -1,4 +1,5 @@
 const jsonwebtoken = require("jsonwebtoken");
+
 exports.issueJWT = (user) => {
   const expiresIn = process.env.JWT_EXPIRES_IN;
   const _id = user._id;

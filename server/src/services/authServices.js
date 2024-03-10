@@ -3,9 +3,20 @@ const bcrypt = require("bcryptjs");
 const { issueJWT } = require("../utils/jwt-utils");
 
 exports.registerUser = async (userPayload) => {
+  const { email, username } = userPayload;
   // Check no duplicate emails exist
-  const existingUser = await User.findOne({ email: userPayload.email }).exec();
-  if (existingUser) throw new Error("Email already exists");
+
+  const existingUser = await User.findOne({
+    $or: [{ username }, { email }],
+  });
+
+  console.log(existingUser);
+  if (existingUser)
+    if (existingUser.username === username) {
+      throw new Error("Username already exists");
+    } else if (existingUser.email === email) {
+      throw new Error("Email already exists");
+    }
 
   //   Create new user
   try {

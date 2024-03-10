@@ -23,8 +23,12 @@ exports.register = async (req, res) => {
       };
       res.status(201).json({ message: "User created", user: userResponse });
     } catch (error) {
+      console.log(error);
       let errorMessage = "Failed to create user";
-      if (error.message.includes("Email")) {
+      if (
+        error.message.includes("Email") ||
+        error.message.includes("Username")
+      ) {
         errorMessage = error.message;
         res.status(409);
       } else res.status(400);
@@ -49,5 +53,20 @@ exports.login = async (req, res) => {
       errorMessage = "You entered the wrong password";
       res.status(401).json({ errors: errorMessage });
     } else res.status(500).json({ error: "An unexpected error occurred." });
+  }
+};
+
+exports.facebookLogin = async (req, res) => {
+  try {
+    const userPayload = {
+      email: req.user.email,
+      // You can add additional fields if needed, like password (for Facebook users, you can set a default password)
+    };
+
+    // Use your existing loginUser function to generate a JWT token
+    const loginResponse = await authServices.loginUser(userPayload);
+    res.status(200).json(loginResponse);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true, maxLength: 255 },
   username: { type: String, required: true, unique: true, maxLength: 50 },
+  email: { type: String, unique: true, maxLength: 255 },
   password: { type: String, required: true, maxLength: 255 },
-  firstName: { type: String, required: true, maxLength: 50 },
-  lastName: { type: String, required: true, maxLength: 50 },
+  firstName: { type: String, maxLength: 50 },
+  lastName: { type: String, maxLength: 50 },
+  photo: String,
+  facebookId: String,
 });
 
 module.exports = mongoose.model("User", UserSchema);
