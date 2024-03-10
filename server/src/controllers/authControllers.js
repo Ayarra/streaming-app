@@ -23,7 +23,6 @@ exports.register = async (req, res) => {
       };
       res.status(201).json({ message: "User created", user: userResponse });
     } catch (error) {
-      console.log(error);
       let errorMessage = "Failed to create user";
       if (
         error.message.includes("Email") ||

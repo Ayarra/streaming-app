@@ -10,7 +10,6 @@ exports.registerUser = async (userPayload) => {
     $or: [{ username }, { email }],
   });
 
-  console.log(existingUser);
   if (existingUser)
     if (existingUser.username === username) {
       throw new Error("Username already exists");

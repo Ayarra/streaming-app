@@ -22,17 +22,13 @@ describe("auth", () => {
   describe("user registration", () => {
     describe("given one of the fields is invalid", () => {
       it("should return 400 with an error message", async () => {
-        const testUser = userPayload.registerInvalidUser;
+        const testUser = { ...userPayload.registerInvalidUser };
         const response = await request(app)
           .post("/auth/register")
           .send(testUser);
 
         expect(response.body).toEqual({
-          errors: [
-            "Username is required",
-            "First name is required",
-            "Last name is required",
-          ],
+          errors: ["Username is required"],
         });
         expect(response.statusCode).toBe(400);
       });
@@ -40,7 +36,7 @@ describe("auth", () => {
 
     describe("given the passwords do not match", () => {
       it("should return 400 with an eroor message", async () => {
-        const testUser = userPayload.registerInvalidPasswordUser;
+        const testUser = { ...userPayload.registerInvalidPasswordUser };
         const response = await request(app)
           .post("/auth/register")
           .send(testUser);
@@ -54,7 +50,7 @@ describe("auth", () => {
 
     describe("given all the fields valid", () => {
       it("should return 201 with a success message", async () => {
-        const testUser = userPayload.registerValidUser;
+        const testUser = { ...userPayload.registerValidUser };
         const response = await request(app)
           .post("/auth/register")
           .send(testUser);
@@ -73,13 +69,30 @@ describe("auth", () => {
 
     describe("given the email already exists", () => {
       it("should return 409 with an error message", async () => {
-        const testUser = userPayload.registerValidUser;
+        const testUser = { ...userPayload.registerValidUser };
+        testUser.username = "newUser";
         const response = await request(app)
           .post("/auth/register")
           .send(testUser);
 
         expect(response.body).toEqual({
           errors: "Email already exists",
+        });
+        expect(response.statusCode).toBe(409);
+      });
+    });
+
+    describe("given the username already exists", () => {
+      it("should return 409 with an error message", async () => {
+        const testUser = { ...userPayload.registerValidUser };
+
+        testUser.email = "newemail@email.com";
+        const response = await request(app)
+          .post("/auth/register")
+          .send(testUser);
+
+        expect(response.body).toEqual({
+          errors: "Username already exists",
         });
         expect(response.statusCode).toBe(409);
       });
