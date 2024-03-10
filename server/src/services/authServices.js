@@ -49,7 +49,6 @@ exports.loginUser = async (userPayload) => {
     return {
       user: {
         _id: existingUser._id,
-        email: existingUser.email,
         username: existingUser.username,
       },
       token: tokenObject.token,

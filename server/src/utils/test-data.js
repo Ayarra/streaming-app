@@ -1,3 +1,7 @@
+/*
+ * REGISTER TEST PAYLOADS
+ */
+
 exports.registerValidUser = {
   email: "test@test.com",
   username: "johndoe",
@@ -22,12 +26,21 @@ exports.registerInvalidPasswordUser = {
   passwordConfirmation: "password@@!",
 };
 
-exports.loginValidUser = {
+/*
+ * LOGIn TEST PAYLOADS
+ */
+
+exports.loginValidEmailUser = {
   email: "test@test.com",
   password: "password@@!",
 };
 
-exports.loginInvalidEmailUser = {
+exports.loginValidUsernameUser = {
+  username: "johndoe",
+  password: "password@@!",
+};
+
+exports.loginInvalidCredentialsUser = {
   email: "wrong@test.com",
   password: "password@@!",
 };

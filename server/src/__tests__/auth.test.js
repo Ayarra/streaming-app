@@ -19,7 +19,7 @@ describe("auth", () => {
     await mongoose.connection.close();
   });
 
-  describe("user registration", () => {
+  describeq("user registration", () => {
     describe("given one of the fields is invalid", () => {
       it("should return 400 with an error message", async () => {
         const testUser = { ...userPayload.registerInvalidUser };
@@ -99,9 +99,9 @@ describe("auth", () => {
     });
   });
   describe("user login", () => {
-    describe("given all credentials are valid", () => {
+    describe("given email is valid", () => {
       it("should return 200 with a success message", async () => {
-        const testUser = userPayload.loginValidUser;
+        const testUser = { ...userPayload.loginValidEmailUser };
 
         const { username } = await User.findOne({
           email: testUser.email,
@@ -111,7 +111,7 @@ describe("auth", () => {
         expect(response.body).toEqual({
           user: {
             _id: expect.any(String),
-            email: testUser.email,
+
             username: username,
           },
           token: expect.any(String),
@@ -120,21 +120,44 @@ describe("auth", () => {
         expect(response.statusCode).toBe(200);
       });
     });
+
+    describe("given username is valid", () => {
+      it("should return 200 with a success message", async () => {
+        const testUser = { ...userPayload.loginValidUsernameUser };
+
+        const { username } = await User.findOne({
+          username: testUser.username,
+        }).exec();
+        const response = await request(app).post("/auth/login").send(testUser);
+
+        expect(response.body).toEqual({
+          user: {
+            _id: expect.any(String),
+
+            username: username,
+          },
+          token: expect.any(String),
+          expiresIn: expect.any(String),
+        });
+        expect(response.statusCode).toBe(200);
+      });
+    });
+
     describe("given a wrong email address", () => {
       it("should return 404 with an error message", async () => {
-        const testUser = userPayload.loginInvalidEmailUser;
+        const testUser = { ...userPayload.loginInvalidCredentialsUser };
 
         const response = await request(app).post("/auth/login").send(testUser);
 
         expect(response.body).toEqual({
-          errors: "User with this email not found",
+          errors: "User with this email/username not found",
         });
         expect(response.statusCode).toBe(404);
       });
     });
     describe("given a wrong password", () => {
       it("should return 404 with an error message", async () => {
-        const testUser = userPayload.loginInvalidPasswordUser;
+        const testUser = { ...userPayload.loginInvalidPasswordUser };
 
         const response = await request(app).post("/auth/login").send(testUser);
 
