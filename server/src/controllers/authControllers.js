@@ -56,7 +56,7 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.facebookLogin = async (req, res) => {
+exports.socialLogin = async (req, res) => {
   try {
     const tokenObject = issueJWT(req.user);
     res.json({
@@ -72,18 +72,3 @@ exports.facebookLogin = async (req, res) => {
   }
 };
 
-exports.googleLogin = async (req, res) => {
-  try {
-    const tokenObject = issueJWT(req.user);
-    res.json({
-      user: {
-        _id: req.user._id,
-        username: req.user.username,
-      },
-      token: tokenObject.token,
-      expiresIn: tokenObject.expires,
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};

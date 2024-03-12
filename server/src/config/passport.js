@@ -4,6 +4,7 @@ const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+var GithubStrategy = require("passport-github").Strategy;
 
 // Misc. imports
 const User = require("../models/userModel");
@@ -103,8 +104,38 @@ const googleStrategy = new GoogleStrategy(
   }
 );
 
+/**
+  GITHUB STRATEGY 
+ */
+
+const githubStrategy = new GithubStrategy(
+  {
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/github/callback",
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      let user = await User.findOne({ githubId: profile.id });
+      console.log(profile);
+      if (!user) {
+        user = await User.create({
+          githubId: profile.id,
+          email: profile.email,
+          username: profile.username,
+          password: await generatePassword(),
+        });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err, null);
+    }
+  }
+);
+
 passport.use(jwtStrategy);
 passport.use(facebookStrategy);
 passport.use(googleStrategy);
+passport.use(githubStrategy);
 
 module.exports = passport;
