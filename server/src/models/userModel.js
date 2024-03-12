@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
   lastName: { type: String, maxLength: 50 },
   photo: String,
   facebookId: String,
+  googleId: String,
 });
 
 module.exports = mongoose.model("User", UserSchema);

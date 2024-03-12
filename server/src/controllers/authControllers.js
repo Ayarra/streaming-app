@@ -58,16 +58,22 @@ exports.login = async (req, res) => {
 
 exports.facebookLogin = async (req, res) => {
   try {
-    // console.log(req.user);
-    // return {
-    //   user: {
-    //     _id: req.user._id,
-    //     username: req.user.username,
-    //   },
-    //   token: tokenObject.token,
-    //   expiresIn: tokenObject.expires,
-    // };
+    const tokenObject = issueJWT(req.user);
+    res.json({
+      user: {
+        _id: req.user._id,
+        username: req.user.username,
+      },
+      token: tokenObject.token,
+      expiresIn: tokenObject.expires,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
+exports.googleLogin = async (req, res) => {
+  try {
     const tokenObject = issueJWT(req.user);
     res.json({
       user: {

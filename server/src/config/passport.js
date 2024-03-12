@@ -1,7 +1,11 @@
+// Passport imports
 const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const FacebookStrategy = require("passport-facebook").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+
+// Misc. imports
 const User = require("../models/userModel");
 const { issueJWT } = require("../utils/jwt-utils");
 const { generateUsername, generatePassword } = require("../utils/login-utils");
@@ -54,8 +58,6 @@ const facebookStrategy = new FacebookStrategy(
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      // Find or create the user in your database
-
       let user = await User.findOne({ facebookId: profile.id });
       if (!user) {
         user = await User.create({
@@ -66,7 +68,34 @@ const facebookStrategy = new FacebookStrategy(
         });
       }
 
-      // const tokenObject = issueJWT(user);
+      return done(null, user);
+    } catch (err) {
+      return done(err, null);
+    }
+  }
+);
+
+/**
+  GOOGLE STRATEGY 
+ */
+
+const googleStrategy = new GoogleStrategy(
+  {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/callback",
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      let user = await User.findOne({ googleId: profile.id });
+      if (!user) {
+        user = await User.create({
+          googleId: profile.id,
+          email: profile.emails[0].value,
+          username: await generateUsername(profile.displayName),
+          password: await generatePassword(),
+        });
+      }
       return done(null, user);
     } catch (err) {
       return done(err, null);
@@ -76,5 +105,6 @@ const facebookStrategy = new FacebookStrategy(
 
 passport.use(jwtStrategy);
 passport.use(facebookStrategy);
+passport.use(googleStrategy);
 
 module.exports = passport;
