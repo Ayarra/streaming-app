@@ -4,6 +4,7 @@ const passport = require("passport");
 
 // Routes imports
 const authRoutes = require("../routes/authRoutes");
+const moviesRoutes = require("../routes/moviesRoutes");
 
 function createServer() {
   const app = express();
@@ -24,6 +25,7 @@ function createServer() {
 
   // USE Routes
   app.use("/auth", authRoutes);
+  app.use("/movies", moviesRoutes);
 
   return app;
 }
