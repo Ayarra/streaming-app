@@ -11,7 +11,7 @@ function MovieCard({ title }) {
       onMouseLeave={() => setHover(false)}
     >
       <img src={poster} className="object-cover w-full " alt="Movie Poster" />
-      <div className="text-gray-200 hover:text-orange-500 text-sm text-center p-2">
+      <div className="text-gray-200 hover:text-orange-400 text-sm text-center p-2">
         <p>{title}</p>
       </div>
       {hover && <MovieCardInfo />}

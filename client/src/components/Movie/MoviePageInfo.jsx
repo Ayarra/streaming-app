@@ -15,13 +15,13 @@ function MoviePageInfo() {
       <div className="text-white">
         <h1 className="text-3xl font-bold mb-2">Title</h1>
         <div className="flex mb-2">
-          <span className="bg-orange-500 text-white px-2 py-1 rounded mr-2">
+          <span className="bg-orange-400 text-white px-2 py-1 rounded mr-2">
             MPAA Rating
           </span>
-          <span className="bg-orange-500 text-white px-2 py-1 rounded mr-2">
+          <span className="bg-orange-400 text-white px-2 py-1 rounded mr-2">
             Rating
           </span>
-          <span className="bg-orange-500 text-white px-2 py-1 rounded mr-2">
+          <span className="bg-orange-400 text-white px-2 py-1 rounded mr-2">
             Duration
           </span>
         </div>
