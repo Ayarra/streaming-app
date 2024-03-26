@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Form, redirect } from "react-router-dom";
 import { loginUser } from "../../api/axios";
+import FormInput from "../FormInput";
 import Svg from "../Svg";
 
 export async function action({ request }) {
@@ -10,24 +12,51 @@ export async function action({ request }) {
 }
 
 function Login() {
+  const [values, setValues] = useState({
+    username: "",
+    password: "",
+  });
+
+  const inputs = [
+    {
+      id: 1,
+      name: "username",
+      type: "text",
+      placeholder: "Username",
+      label: "Username",
+
+      required: true,
+      pattern: "^[A-Za-z0-9]{3,16}$",
+    },
+    {
+      id: 2,
+      name: "password",
+      type: "password",
+      placeholder: "password",
+      label: "Password",
+      required: true,
+    },
+  ];
+
+  const handleChange = (e) => {
+    console.log(values);
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
   return (
     <div className="mt-16 px-28 pb-10 flex flex-col justify-center items-center">
       <Form method="post" className="flex flex-col w-1/2 max-w-72 mb-5">
-        <input
-          type="text"
-          name="username"
-          className="bg-slate-700 text-gray-100 placeholder-gray-400 border border-gray-500 rounded-md px-3 py-2 mb-3 focus:outline-none focus:border-teal-500"
-          placeholder="Username"
-        />
-        <input
-          type="password"
-          name="password"
-          className="bg-slate-700 text-gray-100 placeholder-gray-400 border border-gray-500 rounded-md px-3 py-2 mb-3 focus:outline-none focus:border-teal-500"
-          placeholder="Password"
-        />
+        {inputs.map((input) => (
+          <FormInput
+            key={input.id}
+            {...input}
+            value={values[input.name]}
+            handleChange={handleChange}
+          />
+        ))}
         <button
           type="submit"
-          className="bg-orange-400 hover:bg-orange-500 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="bg-orange-400 hover:bg-orange-500 text-white font-semibold mt-5 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
           Login
         </button>
