@@ -1,8 +1,7 @@
 import { useState } from "react";
-import poster from "../../../public/medium-cover.jpg";
 import MovieCardInfo from "./MovieCardInfo";
 
-function MovieCard({ title }) {
+function MovieCard({ title, cover, bg_img, rating, synopsis, year }) {
   const [hover, setHover] = useState(false);
   return (
     <div
@@ -10,11 +9,19 @@ function MovieCard({ title }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <img src={poster} className="object-cover w-full " alt="Movie Poster" />
+      <img src={cover} className="object-cover w-full " alt="Movie Poster" />
       <div className="text-gray-200 hover:text-orange-400 text-sm text-center p-2">
         <p>{title}</p>
       </div>
-      {hover && <MovieCardInfo />}
+      {hover && (
+        <MovieCardInfo
+          bg_img={bg_img}
+          title={title}
+          rating={rating}
+          synopsis={synopsis}
+          year={year}
+        />
+      )}
       {/* title, rating, year, mini discritpion, blured background image */}
     </div>
   );

@@ -1,6 +1,7 @@
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
+const cors = require("cors");
 
 // Routes imports
 const authRoutes = require("../routes/authRoutes");
@@ -10,6 +11,7 @@ function createServer() {
   const app = express();
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+  app.use(cors());
 
   app.use(
     session({

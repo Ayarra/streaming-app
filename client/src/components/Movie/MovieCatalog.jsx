@@ -1,45 +1,29 @@
+import { Link, useLoaderData } from "react-router-dom";
+import { getMovies } from "../../api/axios";
 import MovieCard from "./MovieCard";
 
+export async function loader() {
+  const moviesCatalog = await getMovies();
+  return moviesCatalog;
+}
+
 function MovieCatalog() {
+  const { movies } = useLoaderData();
+
   return (
     <div className="flex flex-wrap justify-center items-start gap-5 pb-10 px-28 mt-16">
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard
-        title={
-          "Easy Riders, Raging Bulls: How the Sex, Drugs and Rock 'N' Roll Generation Saved Hollywood"
-        }
-      />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"The Cook, the Thief, His Wife & Her Lover"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard
-        title={
-          "Easy Riders, Raging Bulls: How the Sex, Drugs and Rock 'N' Roll Generation Saved Hollywood"
-        }
-      />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"The Cook, the Thief, His Wife & Her Lover"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard
-        title={
-          "Easy Riders, Raging Bulls: How the Sex, Drugs and Rock 'N' Roll Generation Saved Hollywood"
-        }
-      />
-      <MovieCard title={"AAAAAAAAAAAAA AAAAAAAAAAAAA"} />
-      <MovieCard title={"The Cook, the Thief, His Wife & Her Lover"} />
+      {movies.map((movie) => (
+        <Link key={movie.imdb_code} to={`/movies/${movie.imdb_code}`}>
+          <MovieCard
+            title={movie.title}
+            cover={movie.large_cover_image}
+            bg_img={movie.background_image_original}
+            rating={movie.rating}
+            year={movie.year}
+            synopsis={movie.synopsis}
+          />
+        </Link>
+      ))}
     </div>
   );
 }

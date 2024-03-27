@@ -39,7 +39,6 @@ function Login() {
   ];
 
   const handleChange = (e) => {
-    console.log(values);
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 

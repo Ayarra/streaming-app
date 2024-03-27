@@ -1,51 +1,37 @@
-import poster from "../../../public/medium-cover.jpg";
-
-function MoviePageInfo() {
+function MoviePageInfo({ movieDetail }) {
   return (
-    <div className="flex bg-slate-700 pr-6 rounded-lg shadow-md">
-      <div
-        className="w-full h-96 overflow-hidden rounded-lg mr-6 shadow-md flex justify-center items-center"
-        style={{
-          backgroundImage: `url(${poster})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
+    <div className="flex gap-6 bg-slate-700 pr-6 rounded-lg shadow-md  ">
+      <img className="ml-5" src={movieDetail.medium_cover_image} />
 
       <div className="text-white">
-        <h1 className="text-3xl font-bold mb-2">Title</h1>
+        <h1 className="text-3xl font-bold mb-2">{movieDetail.title}</h1>
         <div className="flex mb-2">
           <span className="bg-orange-400 text-white px-2 py-1 rounded mr-2">
-            MPAA Rating
+            {movieDetail.rating + "/10"}
           </span>
           <span className="bg-orange-400 text-white px-2 py-1 rounded mr-2">
-            Rating
-          </span>
-          <span className="bg-orange-400 text-white px-2 py-1 rounded mr-2">
-            Duration
+            {movieDetail.runtime + "min"}
           </span>
         </div>
-        <p className="text-gray-300 mb-4">
-          Jack Mosley, a burnt-out detective, is assigned the unenviable task of
-          transporting a fast-talking convict from jail to a courthouse 16
-          blocks away. However, along the way he learns that the man is supposed
-          to testify against Mosley`&apos;`s colleagues, and the entire NYPD
-          wants him dead. Mosley must choose between loyalty to his colleagues
-          and protecting the witness, and never has such a short distance seemed
-          so long...
+        <p className="text-gray-300 mb-4 overflow-auto max-h-52">
+          {movieDetail.description_full}
         </p>
         <ul className="text-gray-300">
           <li className="mb-1">
-            <span className="font-semibold">Genre:</span> list of genres
+            <span className="font-semibold">Genre:</span>{" "}
+            {movieDetail.genres.join(", ")}
           </li>
           <li className="mb-1">
-            <span className="font-semibold">Release year:</span> 2015
+            <span className="font-semibold">Release year:</span>{" "}
+            {movieDetail.year}
           </li>
           <li className="mb-1">
-            <span className="font-semibold">IMDB Code:</span> 98y453n
+            <span className="font-semibold">IMDB Code:</span>{" "}
+            {movieDetail.imdb_code}
           </li>
           <li className="mb-1">
-            <span className="font-semibold">Cast:</span> list of names,..
+            <span className="font-semibold">Cast:</span>{" "}
+            {movieDetail.cast?.map((actor) => actor.name).join(", ") || "N/A"}
           </li>
         </ul>
       </div>
